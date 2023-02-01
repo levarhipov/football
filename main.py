@@ -1,5 +1,7 @@
 import pygame
 import sys
+
+from ball import Ball
 from player import Player
 
 players = dict()
@@ -15,24 +17,38 @@ def run():
     player2 = Player(screen, "X")
     player3 = Player(screen, "C")
 
+    player2.is_active = True
+
     players[pygame.K_z] = player1
     players[pygame.K_x] = player2
     players[pygame.K_c] = player3
 
+    ball = Ball(screen)
+
     while True:
         for event in pygame.event.get():
             handle_event(player1, event)
-            player1.update_player()
+            player1.update()
             handle_event(player2, event)
-            player2.update_player()
+            player2.update()
             handle_event(player3, event)
-            player3.update_player()
+            player3.update()
+
+            active_player = get_active_player(players)
+            ball.update(active_player)
 
         screen.fill(bg_color)
         player1.output()
         player2.output()
         player3.output()
+        ball.output()
         pygame.display.flip()
+
+
+def get_active_player(all_players):
+    for p in all_players.values():
+        if p.is_active:
+            return p
 
 
 def handle_event(player, event):

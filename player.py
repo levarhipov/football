@@ -23,7 +23,7 @@ class Player:
         """рисование игрока"""
         self.screen.blit(self.image, self.rect)
 
-    def update_player(self):
+    def update(self):
         """обновление позиции игрока"""
         if not self.is_active:
             return

@@ -2,6 +2,7 @@ import pygame
 import sys
 
 from ball import Ball
+from defender import Defender
 from player import Player
 
 players = dict()
@@ -13,9 +14,25 @@ def run():
     pygame.display.set_caption("футбол")
     bg_color = (34, 139, 34)
 
+    defender1 = Defender(screen, "[PlaceHolder1]")
+    defender1.rect.centery = 200
+    defender1.rect.centerx = 300
+    defender2 = Defender(screen, "[PlaceHolder2]")
+    defender2.rect.centery = 50
+    defender2.rect.centerx = 600
+    defender3 = Defender(screen, "[PlaceHolder3]")
+    defender3.rect.centery = 200
+    defender3.rect.centerx = 900
+
     player1 = Player(screen, "Z")
+    player1.rect.centery = 500
+    player1.rect.centerx = 300
     player2 = Player(screen, "X")
+    player2.rect.centery = 600
+    player2.rect.centerx = 600
     player3 = Player(screen, "C")
+    player3.rect.centery = 500
+    player3.rect.centerx = 900
 
     player2.is_active = True
 
@@ -27,17 +44,23 @@ def run():
 
     while True:
         for event in pygame.event.get():
-            handle_event(player1, event)
+            defender1.update()
+            defender2.update()
+            defender3.update()
+            handle_event(event, player1, ball)
             player1.update()
-            handle_event(player2, event)
+            handle_event(event, player2, ball)
             player2.update()
-            handle_event(player3, event)
+            handle_event(event, player3, ball)
             player3.update()
 
             active_player = get_active_player(players)
             ball.update(active_player)
 
         screen.fill(bg_color)
+        defender1.output()
+        defender2.output()
+        defender3.output()
         player1.output()
         player2.output()
         player3.output()
@@ -51,7 +74,7 @@ def get_active_player(all_players):
             return p
 
 
-def handle_event(player, event):
+def handle_event(event, player, ball):
     """обработка событий"""
 
     if event.type == pygame.QUIT:
@@ -71,6 +94,7 @@ def handle_event(player, event):
                 for p in players.values():
                     p.is_active = False
                 selected.is_active = True
+                ball.is_active = True
 
     elif event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT:

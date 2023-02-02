@@ -4,6 +4,7 @@ import sys
 from ball import Ball
 from defender import Defender
 from player import Player
+from gate import Gate
 
 players = dict()
 
@@ -14,14 +15,18 @@ def run():
     pygame.display.set_caption("футбол")
     bg_color = (34, 139, 34)
 
+    gate = Gate(screen, "[PlaceHolderG]")
+    gate.rect.centery = 1
+    gate.rect.centerx = 600
+
     defender1 = Defender(screen, "[PlaceHolder1]")
-    defender1.rect.centery = 200
+    defender1.rect.centery = 270
     defender1.rect.centerx = 300
     defender2 = Defender(screen, "[PlaceHolder2]")
-    defender2.rect.centery = 50
+    defender2.rect.centery = 120
     defender2.rect.centerx = 600
     defender3 = Defender(screen, "[PlaceHolder3]")
-    defender3.rect.centery = 200
+    defender3.rect.centery = 270
     defender3.rect.centerx = 900
 
     player1 = Player(screen, "Z")
@@ -58,6 +63,7 @@ def run():
             ball.update(active_player)
 
         screen.fill(bg_color)
+        gate.output()
         defender1.output()
         defender2.output()
         defender3.output()

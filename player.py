@@ -18,10 +18,16 @@ class Player:
         self.mup = False
         self.mdown = False
         self.is_active = False
+        self.font = pygame.font.SysFont(None, 36)
 
     def output(self):
         """рисование игрока"""
         self.screen.blit(self.image, self.rect)
+        self.label_img = self.font.render(str(self.name), True, (0, 255, 255), (80, 160, 234))
+        self.label_rect = self.label_img.get_rect()
+        self.label_rect.centerx = self.rect.centerx
+        self.label_rect.centery = self.rect.centery
+        self.screen.blit(self.label_img, self.label_rect)
 
     def update(self):
         """обновление позиции игрока"""
@@ -40,3 +46,5 @@ class Player:
 
     def __repr__(self):
         return self.name + " is active: " + str(self.is_active)
+
+    

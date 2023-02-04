@@ -23,7 +23,7 @@ class Player:
     def output(self):
         """рисование игрока"""
         self.screen.blit(self.image, self.rect)
-        self.label_img = self.font.render(str(self.name), True, (0, 255, 255), (80, 160, 234))
+        self.label_img = self.font.render(str(self.name), True, (0, 255, 255), (37, 180, 236))
         self.label_rect = self.label_img.get_rect()
         self.label_rect.centerx = self.rect.centerx
         self.label_rect.centery = self.rect.centery

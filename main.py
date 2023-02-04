@@ -5,6 +5,7 @@ from ball import Ball
 from defender import Defender
 from player import Player
 from gate import Gate
+from scores import Scores
 
 players = dict()
 
@@ -19,13 +20,13 @@ def run():
     gate.rect.centery = 1
     gate.rect.centerx = 600
 
-    defender1 = Defender(screen, "[PlaceHolder1]")
+    defender1 = Defender(screen, "[Defender.1]")
     defender1.rect.centery = 270
     defender1.rect.centerx = 300
-    defender2 = Defender(screen, "[PlaceHolder2]")
+    defender2 = Defender(screen, "[Defender.2]")
     defender2.rect.centery = 120
     defender2.rect.centerx = 600
-    defender3 = Defender(screen, "[PlaceHolder3]")
+    defender3 = Defender(screen, "[Defender.3]")
     defender3.rect.centery = 270
     defender3.rect.centerx = 900
 
@@ -47,20 +48,23 @@ def run():
 
     ball = Ball(screen)
 
+    sc = Scores(screen)
+
     while True:
         for event in pygame.event.get():
-            defender1.update()
-            defender2.update()
-            defender3.update()
-            handle_event(event, player1, ball)
-            player1.update()
-            handle_event(event, player2, ball)
-            player2.update()
-            handle_event(event, player3, ball)
-            player3.update()
+            handle_event(event, player1, ball, sc)
+            handle_event(event, player2, ball, sc)
+            handle_event(event, player3, ball, sc)
 
-            active_player = get_active_player(players)
-            ball.update(active_player)
+        player1.update()
+        player2.update()
+        player3.update()
+        defender1.update()
+        defender2.update()
+        defender3.update()
+
+        active_player = get_active_player(players)
+        ball.update(active_player)
 
         screen.fill(bg_color)
         gate.output()
@@ -71,6 +75,7 @@ def run():
         player2.output()
         player3.output()
         ball.output()
+        sc.output()
         pygame.display.flip()
 
 
@@ -80,7 +85,7 @@ def get_active_player(all_players):
             return p
 
 
-def handle_event(event, player, ball):
+def handle_event(event, player, ball, sc):
     """обработка событий"""
 
     if event.type == pygame.QUIT:
@@ -94,7 +99,7 @@ def handle_event(event, player, ball):
             player.mup = True
         elif event.key == pygame.K_DOWN:
             player.mdown = True
-        else:
+        elif event.key == pygame.K_z or event.key == pygame.K_x or event.key == pygame.K_c:
             selected = players.get(event.key)
             if selected is not None:
                 for p in players.values():

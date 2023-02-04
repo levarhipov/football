@@ -99,7 +99,13 @@ def handle_event(event, player, ball, sc):
             player.mup = True
         elif event.key == pygame.K_DOWN:
             player.mdown = True
-        elif event.key == pygame.K_z or event.key == pygame.K_x or event.key == pygame.K_c:
+        elif player.is_active and event.key == pygame.K_a:
+            sc.strikes += 1
+            sc.image_score()
+        elif player.is_active and event.key == pygame.K_d:
+            sc.strikes += 1
+            sc.image_score()
+        elif event.key in players.keys():
             selected = players.get(event.key)
             if selected is not None:
                 for p in players.values():

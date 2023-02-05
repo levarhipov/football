@@ -30,13 +30,13 @@ def run():
     defender3.rect.centery = 270
     defender3.rect.centerx = 900
 
-    player1 = Player(screen, "Z")
+    player1 = Player(screen, "Z", 'images/blue.png')
     player1.rect.centery = 500
     player1.rect.centerx = 300
-    player2 = Player(screen, "X")
+    player2 = Player(screen, "X", 'images/blue.png')
     player2.rect.centery = 600
     player2.rect.centerx = 600
-    player3 = Player(screen, "C")
+    player3 = Player(screen, "C", 'images/blue.png')
     player3.rect.centery = 500
     player3.rect.centerx = 900
 
@@ -46,15 +46,15 @@ def run():
     players[pygame.K_x] = player2
     players[pygame.K_c] = player3
 
-    ball = Ball(screen)
-
     sc = Scores(screen)
+
+    ball = Ball(screen, sc)
 
     while True:
         for event in pygame.event.get():
-            handle_event(event, player1, ball, sc)
-            handle_event(event, player2, ball, sc)
-            handle_event(event, player3, ball, sc)
+            handle_event(event, player1, ball, sc, gate)
+            handle_event(event, player2, ball, sc, gate)
+            handle_event(event, player3, ball, sc, gate)
 
         player1.update()
         player2.update()
@@ -64,7 +64,7 @@ def run():
         defender3.update()
 
         active_player = get_active_player(players)
-        ball.update(active_player)
+        ball.update(active_player, [defender1, defender2, defender3])
 
         screen.fill(bg_color)
         gate.output()
@@ -85,7 +85,7 @@ def get_active_player(all_players):
             return p
 
 
-def handle_event(event, player, ball, sc):
+def handle_event(event, player, ball, sc, gate):
     """обработка событий"""
 
     if event.type == pygame.QUIT:
@@ -99,19 +99,23 @@ def handle_event(event, player, ball, sc):
             player.mup = True
         elif event.key == pygame.K_DOWN:
             player.mdown = True
-        elif player.is_active and event.key == pygame.K_a:
+        elif not ball.is_strike and event.key == pygame.K_a:
             sc.strikes += 1
-            sc.image_score()
-        elif player.is_active and event.key == pygame.K_d:
+            ball.target = gate.left
+            ball.is_strike = True
+            sc.update()
+        elif not ball.is_strike and event.key == pygame.K_d:
             sc.strikes += 1
-            sc.image_score()
-        elif event.key in players.keys():
+            ball.target = gate.right
+            ball.is_strike = True
+            sc.update()
+        elif not ball.is_pass and event.key in players.keys():
             selected = players.get(event.key)
             if selected is not None:
                 for p in players.values():
                     p.is_active = False
                 selected.is_active = True
-                ball.is_active = True
+                ball.is_pass = True
 
     elif event.type == pygame.KEYUP:
         if event.key == pygame.K_RIGHT:

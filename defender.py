@@ -2,10 +2,10 @@ import random
 import pygame
 
 
-class Defender:
+class Defender(pygame.sprite.Sprite):
 
     def __init__(self, screen, name):
-
+        super(Defender, self).__init__()
         self.name = name
         self.screen = screen
         self.image = pygame.image.load('images/red.png')
